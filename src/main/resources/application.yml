@@ -1,0 +1,30 @@
+#server configuration
+server:
+  port: 8080
+
+#Logging configuration
+logging:
+  file: log.txt
+  level:
+    root: INFO
+    com.banking.online_banking: DEBUG
+    org.springframework: WARN
+    org.hibernate: TRACE
+
+#DataBase configuration
+spring:
+  datasource:
+    url: ${url}
+    username: ${username}
+    password: ${password}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show_sql: true
+
+
+
