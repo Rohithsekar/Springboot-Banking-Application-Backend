@@ -1,5 +1,6 @@
 package com.banking.online_banking.configuration;
 
+import com.banking.online_banking.model.Role;
 import com.banking.online_banking.utilities.RSAKeyProperties;
 import org.springframework.context.annotation.Configuration;
 import org.slf4j.Logger;
@@ -63,8 +64,8 @@ public class Security {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers("/customer/**").hasAnyRole("ADMIN", "USER");
+                    auth.requestMatchers("/admin/**").hasRole(Role.AuthorityLevel.ADMIN.name());
+                    auth.requestMatchers("/customer/**").hasAnyRole(Role.AuthorityLevel.CUSTOMER.name(), Role.AuthorityLevel.ADMIN.name());
                     auth.anyRequest().authenticated();
                 });
 

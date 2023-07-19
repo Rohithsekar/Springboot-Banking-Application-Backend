@@ -26,6 +26,24 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(MinimumAmountRequiredException.class)
+    public ResponseEntity<Object> handleMinimumAmountRequiredException(MinimumAmountRequiredException e){
+
+        return new ResponseEntity<>(new ErrorInfo(e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(UnsupportedAccountTypeException.class)
+    public ResponseEntity<Object> handleUnsupportedAccountTypeException(UnsupportedAccountTypeException e){
+
+        return new ResponseEntity<>(new ErrorInfo(e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST);
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,

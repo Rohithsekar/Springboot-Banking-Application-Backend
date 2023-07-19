@@ -1,9 +1,7 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 @Table(name="customer")
@@ -57,6 +56,7 @@ public class Customer implements UserDetails {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.authorities = authorities;
     }
 
     @Override

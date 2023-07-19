@@ -16,20 +16,37 @@ public class Account {
 
     //Both owning and inversion entity
 
+    public enum AccountType{
+        CHECKING,
+        SAVINGS
+    }
+
     @Id
     @NonNull
     private long accountNumber;
     @NonNull
     private double balance;
     @NonNull
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
     @ManyToOne
     @JoinColumn(name = "customer_id") //foreign key
     private Customer customer;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+
+    public Account(){
+        //default constructor
+    }
+
+    public Account(@NonNull Long accountNumber, @NonNull Double balance, @NonNull AccountType type) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.type = type;
+    }
 }
+
 
 /*
     mappedBy: This attribute specifies the field in the Transaction entity that owns the relationship. It refers

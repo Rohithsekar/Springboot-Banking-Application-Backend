@@ -23,26 +23,60 @@ public class OnlineBankingApplication {
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository,
 						  CustomerRepository customerRepository,
-						  PasswordEncoder passwordEncode){
-		return args ->{
-			if(roleRepository.findByAuthority("ADMIN").isPresent()) return;
+						  PasswordEncoder passwordEncode) {
+		return args -> {
+			if (roleRepository.findByAuthority(Role.AuthorityLevel.ADMIN).isPresent() &&
+					roleRepository.findByAuthority(Role.AuthorityLevel.CUSTOMER).isPresent()) {
+				return;
+			}
 
-			Role adminRole = new Role();
+			Set<Customer> customers = new HashSet<>();
+			Set<Role> authorities = new HashSet<>();
 
-//			Role adminRole = roleRepository.save(new Role("ADMIN"));
-//			roleRepository.save(new Role("USER"));
-//
-//			Set<Role> roles = new HashSet<>();
-//			roles.add(adminRole);
-//
-//			Customer admin = new Customer(1L,"rohi", passwordEncode.encode("rohi"), roles);
-//			userRole.getCustomers().add(customer); // Add customer to role's customers collection
-//
-//
-//			customerRepository.save(admin);
+			if (!roleRepository.findByAuthority(Role.AuthorityLevel.ADMIN).isPresent()) {
+				Customer admin = new Customer();
+				admin.setId(1L);
+				admin.setUsername("rohi");
+				admin.setPassword(passwordEncode.encode("rohi_123"));
 
+				Role adminRole = new Role();
+				adminRole.setRoleId(1);
+				adminRole.setAuthority(Role.AuthorityLevel.ADMIN);
 
+				customers.add(admin);
+				adminRole.setCustomers(customers);
+
+				authorities.add(adminRole);
+				admin.setAuthorities(authorities);
+
+				customerRepository.save(admin);
+				customers.clear();
+				authorities.clear();
+
+			}
+
+			if (!roleRepository.findByAuthority(Role.AuthorityLevel.CUSTOMER).isPresent()) {
+
+				Customer customer = new Customer();
+				customer.setId(2L);
+				customer.setUsername("customer");
+				customer.setPassword(passwordEncode.encode("customer_123"));
+
+				Role customerRole = new Role();
+				customerRole.setRoleId(2);
+				customerRole.setAuthority(Role.AuthorityLevel.CUSTOMER);
+				customers.add(customer);
+				customerRole.setCustomers(customers);
+
+				authorities.add(customerRole);
+				customer.setAuthorities(authorities);
+				customerRepository.save(customer);
+				customers.clear();
+				authorities.clear();
+			}
 		};
 	}
 }
-/*kjkh*/
+
+
+

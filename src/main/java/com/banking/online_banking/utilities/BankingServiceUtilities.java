@@ -24,4 +24,10 @@ range of six-digit numbers.
         Random random = new Random();
         return (long)random.nextInt(900000) + 100000; // Generate a random number between 100000 and 999999
     }
+
+    public static String paymentProcessing(){
+        //API in real-world scenarios are third party payment gateway
+        //such as Paytm, PayPal etc
+        return  new Random().nextBoolean()?"success":"failure";
+    }
 }

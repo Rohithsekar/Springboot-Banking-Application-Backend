@@ -47,17 +47,21 @@ public class AuthenticationService {
             return "Username already exists. Please try with a different username";
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        Role userRole = roleRepository.findByAuthority("USER").get();
 
+        Customer customer = new Customer();
+        customer.setId(BankingServiceUtilities.sixDigitRandomNumber());
+        customer.setUsername(request.getUsername());
+        customer.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        Role customerRole = roleRepository.findByAuthority(Role.AuthorityLevel.CUSTOMER).get();
         Set<Role> authorities = new HashSet<>();
+        Set<Customer> customers = new HashSet<>();
+        authorities.add(customerRole);
+        customers.add(customer);
+        customerRole.setCustomers(customers);
+        customer.setAuthorities(authorities);
 
-        authorities.add(userRole);
-
-        customerRepository.save(new Customer(BankingServiceUtilities.sixDigitRandomNumber(),
-                request.getUsername(),
-                encodedPassword,
-                authorities));
-
+        customerRepository.save(customer);
         return "Registration successful";
     }
 

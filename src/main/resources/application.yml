@@ -4,12 +4,14 @@ server:
 
 #Logging configuration
 logging:
-  file: log.txt
+  file:
+    path: /
+    name: log.txt
   level:
     root: INFO
     com.banking.online_banking: DEBUG
     org.springframework: WARN
-    org.hibernate: TRACE
+    org.hibernate: INFO
 
 #DataBase configuration
 spring:
