@@ -28,6 +28,8 @@ public class LogAspect {
             return joinPoint.proceed();
         }
 
+
+
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = ((MethodSignature)joinPoint.getSignature()).getMethod().getName();
         String methodArgs = Stream.of(joinPoint.getArgs()).collect(Collectors.toList()).toString();

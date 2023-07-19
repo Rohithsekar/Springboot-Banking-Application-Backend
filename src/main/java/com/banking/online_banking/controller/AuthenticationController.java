@@ -3,6 +3,8 @@ package com.banking.online_banking.controller;
 import com.banking.online_banking.assistance.LoginResponse;
 import com.banking.online_banking.assistance.Request;
 import com.banking.online_banking.service.AuthenticationService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +21,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody Request request){
-        return authenticationService.registerCustomer(request);
+    public ResponseEntity<Object> register(@RequestBody @Valid Request request){
+        // Handle the valid request and return the appropriate response
+        return ResponseEntity.ok(authenticationService.registerCustomer(request));
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody Request request){
-        return authenticationService.loginCustomer(request);
+    public ResponseEntity<Object> login(@RequestBody Request request){
+        // Handle the valid request and return the appropriate response
+        return ResponseEntity.ok(authenticationService.loginCustomer(request));
 
     }
 
