@@ -16,6 +16,11 @@ public class Interceptor {
 
     }
 
+    @Pointcut("within(com.banking.online_banking.exception.ExceptionHandler)")
+    public void exceptionPointCut(){
+
+    }
+
     @Pointcut("this(com.banking.online_banking.repository.CustomerRepository) || " +
             "this(com.banking.online_banking.repository.RoleRepository)")
     public void repositoryPointCut(){
@@ -28,7 +33,8 @@ public class Interceptor {
     }
 
 
-    @Pointcut("applicationPointCut() && (controllerPointCut() || servicePointCut() || repositoryPointCut())")
+    @Pointcut("applicationPointCut() && (controllerPointCut() || servicePointCut() || repositoryPointCut()" +
+            "|| exceptionPointCut())")
     public void globalPointCut(){
 
     }

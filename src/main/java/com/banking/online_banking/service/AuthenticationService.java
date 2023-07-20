@@ -1,7 +1,9 @@
 package com.banking.online_banking.service;
 
-import com.banking.online_banking.assistance.LoginResponse;
+import com.banking.online_banking.assistance.IdealResponse;
 import com.banking.online_banking.assistance.Request;
+import com.banking.online_banking.assistance.ResponseStatus;
+import com.banking.online_banking.exception.UsernameAlreadyExistsException;
 import com.banking.online_banking.model.Customer;
 import com.banking.online_banking.model.Role;
 import com.banking.online_banking.repository.CustomerRepository;
@@ -29,22 +31,26 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
+    private IdealResponse idealResponse;
+
     public AuthenticationService(CustomerRepository customerRepository,
                                  RoleRepository roleRepository,
                                  PasswordEncoder passwordEncoder,
                                  AuthenticationManager authenticationManager,
-                                 TokenService tokenService) {
+                                 TokenService tokenService,
+                                 IdealResponse idealResponse) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.idealResponse = new IdealResponse(ResponseStatus.SUCCESS,null,null);
     }
 
-    public String registerCustomer(Request request) {
+    public IdealResponse registerCustomer(Request request) {
         Optional<Customer> existingCustomer = customerRepository.findByUsername(request.getUsername());
         if (existingCustomer.isPresent()) {
-            return "Username already exists. Please try with a different username";
+           throw new UsernameAlreadyExistsException("Username already exists");
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
@@ -62,10 +68,12 @@ public class AuthenticationService {
         customer.setAuthorities(authorities);
 
         customerRepository.save(customer);
-        return "Registration successful";
+        String Data = "Registration successful";
+        idealResponse.setData(Data);
+        return idealResponse;
     }
 
-    public LoginResponse loginCustomer(Request request) throws AuthenticationException {
+    public IdealResponse loginCustomer(Request request) throws AuthenticationException {
 
 
         Authentication auth = authenticationManager.authenticate(
@@ -73,8 +81,7 @@ public class AuthenticationService {
         );
 
         String token = tokenService.generateJwt(auth);
-
-        return new LoginResponse("Login Successful.You can use the token to access the banking features", token);
-
+        idealResponse.setData(token);
+        return idealResponse;
     }
 }

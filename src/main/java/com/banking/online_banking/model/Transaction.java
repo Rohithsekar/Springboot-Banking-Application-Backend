@@ -1,9 +1,11 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.lang.NonNull;
+
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -20,32 +22,30 @@ public class Transaction {
         INITIAL_DEPOSIT,
         DEPOSIT,
         WITHDRAW,
-        TRANSFER,
-        VIEW_BALANCE,
-        ACCOUNT_STATEMENT,
-        CHANGE_PASSWORD
+        TRANSFER
     }
 
     //owning entity
 
     @Id
-    @NonNull
+    @NotBlank
     private String transactionId;
     private Date sentFrom;
     private Date receivedBy;
-    @NonNull
+    @NotNull
     private Double amount;
-    @NonNull
+    @NotBlank
     private String status;
-    @NonNull
-    private LocalDate transactiondate;
-    @NonNull
+    @NotNull
+    private LocalDate transactionDate;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private TransactionType transactionType;
-    @NonNull
+    @NotNull
     private double closingBalance;
     @ManyToOne
     @JoinColumn(name = "account_number") //foreign key
+    @NotNull
     private Account account;
 
     public Transaction() {

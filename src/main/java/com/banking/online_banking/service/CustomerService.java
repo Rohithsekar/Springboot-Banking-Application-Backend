@@ -4,6 +4,8 @@ package com.banking.online_banking.service;
 
 import com.banking.online_banking.assistance.AccountCreationRequest;
 import com.banking.online_banking.assistance.AccountCreationResponse;
+import com.banking.online_banking.assistance.IdealResponse;
+import com.banking.online_banking.assistance.ResponseStatus;
 import com.banking.online_banking.exception.MinimumAmountRequiredException;
 import com.banking.online_banking.exception.UnsupportedAccountTypeException;
 import com.banking.online_banking.model.Account;
@@ -35,17 +37,21 @@ public class CustomerService {
 
     private final AuthenticationManager authenticationManager;
 
+    private IdealResponse idealResponse;
+
     public CustomerService(CustomerRepository customerRepository,
                            AccountRepository accountRepository,
-                           AuthenticationManager authenticationManager){
+                           AuthenticationManager authenticationManager,
+                           IdealResponse idealResponse){
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
         this.authenticationManager = authenticationManager;
+        this.idealResponse = new IdealResponse(ResponseStatus.SUCCESS,null,null);
     }
 
 
     @Transactional
-    public AccountCreationResponse createAccount(AccountCreationRequest creationRequest) {
+    public IdealResponse createAccount(AccountCreationRequest creationRequest) {
         if(creationRequest.amount()<2500){
             throw new MinimumAmountRequiredException("Initial deposit should be minimum Rs.2500");
         }
@@ -85,13 +91,16 @@ public class CustomerService {
         transaction.setAmount(creationRequest.amount());
         transaction.setTransactionType(Transaction.TransactionType.INITIAL_DEPOSIT);
         transaction.setClosingBalance(creationRequest.amount());
-        transaction.setTransactiondate(LocalDate.now());
+        transaction.setTransactionDate(LocalDate.now());
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
         account.setTransactions(transactions);
         transaction.setAccount(account);
 
         accountRepository.save(account);
-        return new AccountCreationResponse(account.getAccountNumber(),account.getBalance(), account.getType());
+        AccountCreationResponse Data =new  AccountCreationResponse(account.getAccountNumber(),
+                account.getBalance(), account.getType());
+        idealResponse.setData(Data);
+        return idealResponse;
     }
 }

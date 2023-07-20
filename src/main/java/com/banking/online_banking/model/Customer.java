@@ -1,6 +1,8 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,12 +22,12 @@ public class Customer implements UserDetails {
     //inversion entity
 
     @Id
-    @NonNull
+    @NotNull
     private Long id;
-    @NonNull
+    @NotBlank
     @Column(unique = true)
     private String username;
-    @NonNull
+    @NotBlank
     private String password;
 
     //This field is based on the assumption that a customer could have multiple roles besides
@@ -37,7 +39,7 @@ public class Customer implements UserDetails {
             joinColumns = {@JoinColumn(name="customer_id")},
             inverseJoinColumns = {@JoinColumn(name="role_id")}
     )
-    @NonNull
+    @NotNull
     private Set<Role> authorities;
     @OneToMany(mappedBy = "customer")
     private List<Account> accounts;

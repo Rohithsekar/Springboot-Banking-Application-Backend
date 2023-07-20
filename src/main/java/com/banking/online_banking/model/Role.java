@@ -1,6 +1,8 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -34,13 +36,16 @@ public class Role implements GrantedAuthority {
 
     @Id
     @Column(name="role_id")
+    @NotNull
     private Integer roleId;
 
     @Column(unique = true)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private AuthorityLevel authority;
 
     @ManyToMany(mappedBy = "authorities")
+    @NotNull
     private Set<Customer> customers;
 
     public Role(){

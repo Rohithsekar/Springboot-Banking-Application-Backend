@@ -1,6 +1,6 @@
 package com.banking.online_banking.controller;
 
-import com.banking.online_banking.assistance.LoginResponse;
+import com.banking.online_banking.assistance.IdealResponse;
 import com.banking.online_banking.assistance.Request;
 import com.banking.online_banking.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -21,13 +21,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody @Valid Request request){
+    public ResponseEntity<IdealResponse> register(@RequestBody @Valid Request request){
         // Handle the valid request and return the appropriate response
         return ResponseEntity.ok(authenticationService.registerCustomer(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Request request){
+    public ResponseEntity<IdealResponse> login(@RequestBody Request request){
         // Handle the valid request and return the appropriate response
         return ResponseEntity.ok(authenticationService.loginCustomer(request));
 

@@ -4,8 +4,10 @@ package com.banking.online_banking.controller;
 
 import com.banking.online_banking.assistance.AccountCreationRequest;
 import com.banking.online_banking.assistance.AccountCreationResponse;
+import com.banking.online_banking.assistance.IdealResponse;
 import com.banking.online_banking.model.Account;
 import com.banking.online_banking.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class CustomerController {
     }
 
     @PostMapping("/createAccount")
-    public AccountCreationResponse createAccount(@RequestBody AccountCreationRequest creationRequest){
+    public IdealResponse createAccount(@Valid @RequestBody AccountCreationRequest creationRequest){
         return customerService.createAccount(creationRequest);
     }
 }

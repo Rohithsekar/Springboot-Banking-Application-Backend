@@ -1,6 +1,8 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.lang.NonNull;
@@ -22,15 +24,16 @@ public class Account {
     }
 
     @Id
-    @NonNull
+    @NotNull
     private long accountNumber;
-    @NonNull
+    @NotNull
     private double balance;
-    @NonNull
     @Enumerated(EnumType.STRING)
+    @NotNull
     private AccountType type;
     @ManyToOne
     @JoinColumn(name = "customer_id") //foreign key
+    @NotNull
     private Customer customer;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
