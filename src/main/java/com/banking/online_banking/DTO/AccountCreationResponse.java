@@ -1,4 +1,4 @@
-package com.banking.online_banking.assistance;
+package com.banking.online_banking.DTO;
 
 import com.banking.online_banking.model.Account;
 

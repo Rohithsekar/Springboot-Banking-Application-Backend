@@ -2,10 +2,9 @@ package com.banking.online_banking.controller;
 
 
 
-import com.banking.online_banking.assistance.AccountCreationRequest;
-import com.banking.online_banking.assistance.AccountCreationResponse;
-import com.banking.online_banking.assistance.IdealResponse;
-import com.banking.online_banking.model.Account;
+import com.banking.online_banking.DTO.AccountCreationRequest;
+import com.banking.online_banking.DTO.IdealResponse;
+import com.banking.online_banking.DTO.TransferRequest;
 import com.banking.online_banking.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,4 +25,13 @@ public class CustomerController {
     public IdealResponse createAccount(@Valid @RequestBody AccountCreationRequest creationRequest){
         return customerService.createAccount(creationRequest);
     }
+
+    @PostMapping("/transfer")
+    public IdealResponse transfer(@Valid @RequestBody TransferRequest transferRequest){
+        return customerService.transferAmount(transferRequest);
+    }
+
+
+
+
 }

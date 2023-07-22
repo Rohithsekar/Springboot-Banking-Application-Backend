@@ -31,7 +31,7 @@ public class Role implements GrantedAuthority {
 
     public enum AuthorityLevel{
         ADMIN,
-        CUSTOMER
+        CUSTOMER,
     }
 
     @Id
@@ -45,13 +45,16 @@ public class Role implements GrantedAuthority {
     private AuthorityLevel authority;
 
     @ManyToMany(mappedBy = "authorities")
-    @NotNull
     private Set<Customer> customers;
 
     public Role(){
 
     }
 
+    public Role(@NotNull Integer roleId, @NotNull AuthorityLevel authority) {
+        this.roleId = roleId;
+        this.authority = authority;
+    }
 
     public Role(AuthorityLevel authority){
         this.authority = authority;

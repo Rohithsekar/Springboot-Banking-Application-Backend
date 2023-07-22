@@ -1,8 +1,8 @@
 package com.banking.online_banking.service;
 
-import com.banking.online_banking.assistance.IdealResponse;
-import com.banking.online_banking.assistance.Request;
-import com.banking.online_banking.assistance.ResponseStatus;
+import com.banking.online_banking.DTO.IdealResponse;
+import com.banking.online_banking.DTO.Request;
+import com.banking.online_banking.DTO.ResponseStatus;
 import com.banking.online_banking.exception.UsernameAlreadyExistsException;
 import com.banking.online_banking.model.Customer;
 import com.banking.online_banking.model.Role;

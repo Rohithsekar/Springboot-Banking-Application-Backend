@@ -24,6 +24,10 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
     }
 
+    /*
+    * To generate JWT.
+    * @Authentication ---
+    * */
     public String generateJwt(Authentication auth){
 
         String scope = auth.getAuthorities().stream()

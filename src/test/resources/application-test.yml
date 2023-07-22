@@ -1,0 +1,18 @@
+#server:
+#  port: 9090
+
+#
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/test_online_banking?allowPublicKeyRetrieval=true&useSSL=false
+#    username: root
+#    password: password
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQLDialect
+#        format_sql: true
+#    hibernate:
+#      ddl-auto: create-drop
+#      show_sql: true

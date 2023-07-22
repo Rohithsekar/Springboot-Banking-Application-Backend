@@ -1,5 +1,6 @@
 package com.banking.online_banking;
 
+import com.banking.online_banking.DAO.TransactionResponse;
 import com.banking.online_banking.model.Customer;
 import com.banking.online_banking.model.Role;
 import com.banking.online_banking.repository.CustomerRepository;
@@ -18,6 +19,11 @@ public class OnlineBankingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineBankingApplication.class, args);
+	}
+
+	@Bean
+	public TransactionResponse transactionResponse() {
+		return new TransactionResponse();
 	}
 
 	@Bean

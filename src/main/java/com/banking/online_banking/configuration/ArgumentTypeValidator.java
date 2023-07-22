@@ -6,6 +6,6 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ArgumentTypeValidator implements ConstraintValidator<ValidArgumentType, Double> {
     @Override
     public boolean isValid(Double aDouble, ConstraintValidatorContext constraintValidatorContext) {
-        return aDouble != null;
+        return (aDouble instanceof Double) && (aDouble!=null);
     }
 }

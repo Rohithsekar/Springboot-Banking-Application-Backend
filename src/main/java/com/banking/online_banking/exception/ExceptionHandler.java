@@ -1,22 +1,21 @@
 package com.banking.online_banking.exception;
 
-import com.banking.online_banking.assistance.IdealResponse;
-import com.banking.online_banking.assistance.ResponseStatus;
+import com.banking.online_banking.DTO.IdealResponse;
+import com.banking.online_banking.DTO.ResponseStatus;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -52,6 +51,12 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(UsernameAlreadyExistsException.class)
     public IdealResponse handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
+        idealResponse.setError("Username already exists.");
+        return idealResponse;
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CustomGeneralException.class)
+    public IdealResponse handleCustomGeneralException(CustomGeneralException e) {
         idealResponse.setError(e.getMessage());
         return idealResponse;
     }
@@ -66,6 +71,44 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(statusCode, errorMap);
         idealResponse.setError(errorDetails);
         return new ResponseEntity<>(idealResponse, headers, statusCode);
+    }
+
+    /*
+    When Spring tries to bind the JSON request fields to the corresponding fields in the DTO class, it does so in a
+    sequential manner. If there are multiple validation errors (e.g., fields with invalid data types or other
+    constraints), Spring will encounter them one by one and throw an exception for the first invalid encounter it finds.
+
+    In the case of JSON deserialization for a DTO class, the binding process follows a specific order, typically based
+    on the order of fields in the class or the order they are defined in the JSON data. When deserializing JSON to a
+    Java object, the process usually goes as follows:
+
+    Spring attempts to convert the JSON properties to their corresponding data types in the DTO class.
+    If it encounters a field with an invalid data type, it will throw an exception for that specific field and stop the
+    process for that particular JSON property.
+    If there are other fields that have not been processed yet, Spring will not proceed to those fields because it
+    already encountered an exception.
+
+    This means that if there are multiple invalid fields in the JSON data, Spring will throw an exception for the first
+    invalid field it encounters, and the subsequent fields will not be processed during that particular
+    deserialization attempt.
+     */
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        if (ex.getCause() instanceof InvalidFormatException) {
+            InvalidFormatException iex = (InvalidFormatException) ex.getCause();
+            String fieldName = iex.getPath().get(0).getFieldName();
+            String error = "Oops. There seems to be a type mismatch. Please ensure that your fields are having the correct" +
+                    "type.";
+
+
+             idealResponse.setError(error);
+        }
+        else {
+            String errorMessage = "Failed to read request.";
+            idealResponse.setError(errorMessage);
+        }
+        return new ResponseEntity<>(idealResponse, headers, status);
     }
 
 
