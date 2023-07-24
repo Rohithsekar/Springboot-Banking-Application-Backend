@@ -29,9 +29,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class) //used to integrate Mockito with JUnit 5, allowing the use of Mockito's mocking capabilities.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)// Instruct Spring to use the configured MySQL database
-@Import(TestConfig.class)
+@Import(TestConfig.class) //imports additional configurations or beans needed for testing.
 class AuthenticationServiceTest {
 
     @Mock
@@ -56,6 +56,14 @@ class AuthenticationServiceTest {
 
     @BeforeEach
     void setUp() {
+        /*
+        MockitoAnnotations.openMocks(this), Mockito scans the test class for fields annotated with @Mock and initializes
+        them as mock objects. This is essential to ensure that the mock objects are properly set up and ready to be
+        used during the test methods.
+
+        Without calling this method, the mock objects will remain uninitialized, and any interaction with them in the
+        test methods would result in NullPointerExceptions
+         */
         MockitoAnnotations.openMocks(this);
         authenticationService = new AuthenticationService(
                 customerRepository,
@@ -84,7 +92,7 @@ class AuthenticationServiceTest {
 
         Role customerRole = new Role(9,Role.AuthorityLevel.CUSTOMER);
 
-
+        //mocking the behaviour of mock objects
         given(customerRepository.findByUsername(username)).willReturn(Optional.empty());
         given(passwordEncoder.encode(password)).willReturn(encodedPassword);
         given(roleRepository.findByAuthority(Role.AuthorityLevel.CUSTOMER)).willReturn(Optional.of(customerRole));

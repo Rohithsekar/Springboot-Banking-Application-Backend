@@ -69,6 +69,10 @@ public class Security {
                     auth.anyRequest().authenticated();
                 });
 
+        /*
+        .http.oauth2ResourceServer(oauth2 -> { ... }): Configures the application as an OAuth 2.0 resource server,
+        enabling the validation of JSON Web Tokens (JWT) sent in the request headers for authentication.
+         */
 
         http.oauth2ResourceServer(oauth2 -> {
             oauth2.jwt(jwt -> {
@@ -85,23 +89,47 @@ public class Security {
     @Bean
     public JwtDecoder jwtDecoder(){
         log.debug("********inside jwtDecoder method********");
+        /*
+        JwtDecoder is responsible for decoding JSON Web Tokens (JWT) and extracting the token's claims and information.
+
+        NimbusJwtDecoder.withPublicKey(keys.getPublicKey()): Creates a JwtDecoder with a public key used to
+        verify the JWT signature
+         */
         return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
     }
 
+    //JwtEncoder is responsible for encoding and signing JWTs
     @Bean
     public JwtEncoder jwtEncoder(){
         log.debug("*********inside jwtEncoder method**********");
+        /*
+        A JWK (JSON Web Key) is created with the keys.getPublicKey() and keys.getPrivateKey() methods. It is used to
+         represent the key pair used for signing and verifying JWTs.
+         */
         JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
+        //A JWKSource is created with the JWKSet containing the previously created JWK.
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        //A NimbusJwtEncoder is returned, using the JWKSource to sign the JWTs.
         return new NimbusJwtEncoder(jwks);
     }
 
+    /*
+    The JwtAuthenticationConverter is responsible for converting JWT claims into GrantedAuthority objects used
+    for authentication in Spring Security.
+     */
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter(){
         log.debug("*******inside jwtAuthenticationConverter method*******");
+
+         //   A JwtGrantedAuthoritiesConverter is created, which specifies how to extract authorities from JWT claims.
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        // The authority claim name is set to "roles"
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        //the authority prefix is set to "ROLE_". This means that authorities listed in the "roles" claim of the JWT
+        // will be converted into GrantedAuthority objects with "ROLE_" prefix, which is the typical convention used
+        // in Spring Security for role-based access control.
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        // The JwtGrantedAuthoritiesConverter is set as the converter for the JwtAuthenticationConverter.
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;

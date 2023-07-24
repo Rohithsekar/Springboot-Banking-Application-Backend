@@ -187,6 +187,8 @@ public class CustomerService {
                 payerTransaction.setClosingBalance(updatedPayerBalance);
                 beneficiaryTransaction.setClosingBalance(updatedBeneficiaryBalance);
 
+                idealResponse.setStatus(ResponseStatus.SUCCESS);
+
             }
             else{
                 payerTransaction.setStatus(ResponseStatus.FAILURE.name());
@@ -195,6 +197,7 @@ public class CustomerService {
                 payerTransaction.setClosingBalance(payerBalance);
                 beneficiaryTransaction.setClosingBalance(beneficiaryAccount.getBalance());
 
+                idealResponse.setError("Payment processing failed");
                 idealResponse.setStatus(ResponseStatus.FAILURE);
             }
 
