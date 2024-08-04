@@ -1,7 +1,7 @@
 package com.banking.online_banking.controller;
 
-import com.banking.online_banking.assistance.IdealResponse;
-import com.banking.online_banking.assistance.Request;
+import com.banking.online_banking.DTO.IdealResponse;
+import com.banking.online_banking.DTO.Request;
 import com.banking.online_banking.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

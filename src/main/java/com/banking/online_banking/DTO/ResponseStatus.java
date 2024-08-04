@@ -1,4 +1,4 @@
-package com.banking.online_banking.assistance;
+package com.banking.online_banking.DTO;
 
 public enum ResponseStatus {
     SUCCESS,

@@ -39,8 +39,8 @@ public class Customer implements UserDetails {
             joinColumns = {@JoinColumn(name="customer_id")},
             inverseJoinColumns = {@JoinColumn(name="role_id")}
     )
-    @NotNull
-    private Set<Role> authorities;
+
+    private Set<Role> authorities; //it is not annotated with @NotNull to simplify object creation during testing
     @OneToMany(mappedBy = "customer")
     private List<Account> accounts;
        /*
@@ -54,11 +54,10 @@ public class Customer implements UserDetails {
     public Customer(){
         //default constructor
     }
-    public Customer(@NonNull Long id, @NonNull String username, @NonNull String password, @NonNull  Set<Role> authorities) {
+    public Customer(@NonNull Long id, @NonNull String username, @NonNull String password) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.authorities = authorities;
     }
 
     @Override

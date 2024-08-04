@@ -1,7 +1,6 @@
-package com.banking.online_banking.assistance;
+package com.banking.online_banking.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +8,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Request {
-    @NotBlank(message = "Username should not be null")
+
+    @Pattern(regexp ="^[a-zA-Z]+$", message="Username should only contain letters")
     private String username;
 
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s])(?=.{8,})[^\\s]*$",

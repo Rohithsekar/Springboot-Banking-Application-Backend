@@ -1,16 +1,19 @@
 package com.banking.online_banking.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
-
-@Data
-//@NoArgsConstructor
+//Don't use Lombok @Data annotation which would generate getters, setters, toString, and hashCode methods
+//especially when you have cascading relationship between entities as it would result in stack overflow exception
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="account")
@@ -25,28 +28,37 @@ public class Account {
 
     @Id
     @NotNull
-    private long accountNumber;
+    private Long accountId; // Add a new primary key for the account
+
     @NotNull
-    private double balance;
+    private Long accountNumber;
+    @NotNull
+    private Double balance;
     @Enumerated(EnumType.STRING)
     @NotNull
     private AccountType type;
     @ManyToOne
     @JoinColumn(name = "customer_id") //foreign key
-    @NotNull
-    private Customer customer;
+
+    private Customer customer; //it is not annotated with @NotNull to simplify object creation during testing
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    public Account(){
-        //default constructor
-    }
 
-    public Account(@NonNull Long accountNumber, @NonNull Double balance, @NonNull AccountType type) {
+    public Account(@NonNull Long accountId, @NonNull Long accountNumber, @NonNull Double balance, @NonNull AccountType type) {
+        this.accountId = accountId;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.type = type;
+    }
+
+    public Account(@NotNull Long accountId, @NotNull Long accountNumber, @NotNull Double balance, @NotNull AccountType type, Customer customer) {
+        this.accountId = accountId;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.type = type;
+        this.customer = customer;
     }
 }
 

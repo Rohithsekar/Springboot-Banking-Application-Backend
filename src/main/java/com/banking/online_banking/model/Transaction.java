@@ -5,12 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.sql.Date;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 //@NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,8 +33,8 @@ public class Transaction {
     @Id
     @NotBlank
     private String transactionId;
-    private Date sentFrom;
-    private Date receivedBy;
+    private long sentFrom;
+    private long receivedBy;
     @NotNull
     private Double amount;
     @NotBlank
@@ -44,7 +47,7 @@ public class Transaction {
     @NotNull
     private double closingBalance;
     @ManyToOne
-    @JoinColumn(name = "account_number") //foreign key
+    @JoinColumn(name = "account_id") //foreign key
     @NotNull
     private Account account;
 
